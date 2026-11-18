@@ -1,0 +1,167 @@
+{
+  "info": {
+    "name": "spring-mongo-users",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Создать пользователя (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alexey\",\n  \"email\": \"alexey@mail.ru\",\n  \"age\": 30\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 Created', () => pm.response.to.have.status(201));",
+              "pm.collectionVariables.set('userId', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Создать второго пользователя (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Anna\",\n  \"email\": \"anna@mail.ru\",\n  \"age\": 25\n}"
+        }
+      }
+    },
+    {
+      "name": "3. Все пользователи (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/api/users"
+      }
+    },
+    {
+      "name": "4. Пользователь по id (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/api/users/{{userId}}"
+      }
+    },
+    {
+      "name": "5. Поиск по имени (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/api/users?name=alexey"
+      }
+    },
+    {
+      "name": "6. Поиск по возрасту (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/api/users?age=25"
+      }
+    },
+    {
+      "name": "7. Поиск по диапазону возраста (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/api/users?minAge=20&maxAge=28"
+      }
+    },
+    {
+      "name": "8. Обновить пользователя (200)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/users/{{userId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Alexey\",\n  \"email\": \"alexey.new@mail.ru\",\n  \"age\": 31\n}"
+        }
+      }
+    },
+    {
+      "name": "9. Невалидные данные (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"email\": \"not-an-email\",\n  \"age\": -5\n}"
+        }
+      }
+    },
+    {
+      "name": "10. Повторный email (409)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/users",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Copy\",\n  \"email\": \"anna@mail.ru\",\n  \"age\": 20\n}"
+        }
+      }
+    },
+    {
+      "name": "11. Удалить пользователя (204)",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "http://localhost:8080/api/users/{{userId}}"
+      }
+    },
+    {
+      "name": "12. Удалённый пользователь (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8080/api/users/{{userId}}"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "userId",
+      "value": ""
+    }
+  ]
+}
